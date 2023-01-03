@@ -9,7 +9,20 @@ from mangum import Mangum
 import boto3
 import io
 
-app = FastAPI()
+import boto3
+session = boto3.Session(
+    aws_access_key_id=${{ AWS_ACCESS_KEY_ID }}, 
+    aws_secret_access_key=${{ AWS_SECRET_ACCESS_KEY }}
+)
+
+s3 = session.resource('s3', region_name='eu-central-1', )
+mcc_descriptions = s3.Object(bucket_name='mccapibucket', key='mcc_descriptions.csv')
+mcc_weights = s3.Object(bucket_name='mccapibucket', key='mcc_embeddings_mini_bert.pt')
+
+# Convert to regular Python objects
+df = pd.read_csv(mcc_descriptions.get()['Body'])
+mcc_embeddings = torch.load(io.BytesIO(mcc_weights.get()['Body'].read()))
+
 
 # Define input and output structures
 class QueryPhrase(BaseModel):
@@ -24,13 +37,12 @@ class MCCMatch(BaseModel):
 # Get model from sentence_transformers
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-class Msg(BaseModel):
-    msg: str
-
 # APP
+app = FastAPI()
+
 @app.get("/")
 def read_root():
-    return {"Curious about what MCC Code to use?": "Search now at the /predict endpoint!"}
+    return {"Curious about what MCC Code to use?": "Rows: {}".format(len(df))}
 
 @app.get("/path")
 async def demo_get():

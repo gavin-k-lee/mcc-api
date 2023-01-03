@@ -43,8 +43,24 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Curious about what MCC Code to use?": "Rows: {}".format(len(df)+100)}
+    return {"Curious about what MCC Code to use?": "Check out the POST /predict endpoint!"}
 
-@app.get("/path")
-async def demo_get():
-    return {"message": "This is /path endpoint, use a post request to transform the text to uppercase"}
+@app.post("/predict")
+def predict_mcc(payload: QueryPhrase):
+    # Embed query in BERT space
+    embeddings_query = model.encode([payload.query], convert_to_tensor=True)
+    # Compute cosine-similarities
+    cosine_scores = util.cos_sim(mcc_embeddings, embeddings_query)
+    # Convert tensor to numpy
+    match_df = df.copy()
+    match_df['matches_to_query'] = cosine_scores.numpy()    
+    # Rename columns
+    match_df = match_df.rename(columns={'mcc': 'mcc_code', 'short_name': 'name', 'unaltered_description': 'mcc_description', 'matches_to_query': 'mcc_match'})
+    # Get top 5
+    output_df = match_df[['mcc_code', 'name', 'mcc_match', 'mcc_description',]] \
+        .sort_values('mcc_match', ascending=False) \
+        .head(5) \
+        .astype({'mcc_match': 'float'}) \
+        .round({'mcc_match': 5})
+  
+    return output_df.to_dict('records')

@@ -10,13 +10,13 @@ import boto3
 import io
 import os
 
-import boto3
+# Get data from AWS S3
 session = boto3.Session(
     aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'), 
-    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
 )
 
-s3 = session.resource('s3', region_name='eu-central-1', )
+s3 = session.resource('s3', region_name='eu-central-1')
 mcc_descriptions = s3.Object(bucket_name='mccapibucket', key='mcc_descriptions.csv')
 mcc_weights = s3.Object(bucket_name='mccapibucket', key='mcc_embeddings_mini_bert.pt')
 
@@ -43,7 +43,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Curious about what MCC Code to use?": "Rows: {}".format(len(df))}
+    return {"Curious about what MCC Code to use?": "Rows: {}".format(len(df)+100)}
 
 @app.get("/path")
 async def demo_get():

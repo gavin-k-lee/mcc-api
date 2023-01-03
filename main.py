@@ -11,14 +11,26 @@ import io
 
 app = FastAPI()
 
+# Define input and output structures
+class QueryPhrase(BaseModel):
+    query: str
+
+class MCCMatch(BaseModel):
+    mcc_code: str
+    name: str
+    mcc_match: float
+    mcc_description: str
+
+# Get model from sentence_transformers
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
 class Msg(BaseModel):
     msg: str
 
-
+# APP
 @app.get("/")
-async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
-
+def read_root():
+    return {"Curious about what MCC Code to use?": "Search now at the /predict endpoint!"}
 
 @app.get("/path")
 async def demo_get():

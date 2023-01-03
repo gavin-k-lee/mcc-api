@@ -8,11 +8,12 @@ from sentence_transformers import SentenceTransformer, util
 from mangum import Mangum
 import boto3
 import io
+import os
 
 import boto3
 session = boto3.Session(
-    aws_access_key_id=${{ AWS_ACCESS_KEY_ID }}, 
-    aws_secret_access_key=${{ AWS_SECRET_ACCESS_KEY }}
+    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'), 
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
 )
 
 s3 = session.resource('s3', region_name='eu-central-1', )

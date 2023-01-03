@@ -1,5 +1,13 @@
+import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+from typing import Optional
+import pandas as pd
+import torch
+from sentence_transformers import SentenceTransformer, util
+from mangum import Mangum
+import boto3
+import io
 
 app = FastAPI()
 

@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 import pandas as pd
@@ -40,6 +41,20 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # APP
 app = FastAPI()
+
+# Allow front-end to access it
+origins = [
+    "https://mcc-react.vercel.app",
+    "https://mcc-react-gavin-k-lee.vercel.app"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():

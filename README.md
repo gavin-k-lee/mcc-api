@@ -13,4 +13,4 @@ curl --request POST \
 }'
 ```
 
-Swagger docs are available at [https://fastapi-production-c09f.up.railway.app/docs](https://fastapi-production-c09f.up.railway.app/docs).
+Swagger docs are available at [https://fastapi-production-c09f.up.railway.app/docs](https://fastapi-production-c09f.up.railway.app/docs)!

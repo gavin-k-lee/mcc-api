@@ -2,7 +2,7 @@
 
 This repository contains the code used for a [FastAPI](https://fastapi.tiangolo.com/) server. It is deployed on [Railway](https://railway.app/).
 
-You can access the API using HTTPS requests at [https://fastapi-production-c09f.up.railway.app/](https://fastapi-production-c09f.up.railway.app/). For example:
+You can access the API using HTTP requests at [https://fastapi-production-c09f.up.railway.app/](https://fastapi-production-c09f.up.railway.app/). For example:
 
 ```
 curl --request POST \
